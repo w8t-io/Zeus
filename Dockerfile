@@ -1,0 +1,24 @@
+FROM registry.js.design/library/golang:1.23.3-otel-amd64 AS builder
+
+ARG VERSION
+
+ENV GOPROXY=https://goproxy.cn,direct
+
+WORKDIR /root
+
+COPY . /root
+
+RUN CGO_ENABLED=0 go build -o Zeus . \
+    && chmod +x Zeus
+
+FROM alpine:3.19
+
+COPY --from=builder /root/Zeus /app/Zeus
+
+RUN sed -i "s/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g" /etc/apk/repositories \
+    && apk upgrade && apk add --no-cache --virtual .build-deps \
+    ca-certificates upx tzdata
+
+WORKDIR /app
+
+ENTRYPOINT ["/app/Zeus"]
