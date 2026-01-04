@@ -3,14 +3,16 @@ package api
 import (
 	"Zeus/internal/services"
 	"Zeus/internal/types"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 )
 
-type userController struct{}
+type userAPI struct{}
 
-var UserController = new(userController)
+var User = new(userAPI)
 
-func (u *userController) API(gin *gin.RouterGroup) {
+func (u *userAPI) API(gin *gin.RouterGroup) {
 	user := gin.Group("user")
 	//user.Use()
 	{
@@ -20,37 +22,37 @@ func (u *userController) API(gin *gin.RouterGroup) {
 	}
 }
 
-func (u *userController) Register(ctx *gin.Context) {
+func (u *userAPI) Register(ctx *gin.Context) {
 	r := new(types.RequestUserRegister)
 
 	Service(ctx, func() (interface{}, error) {
 		err := BindJson(ctx, r)
 		if err != nil {
-			return nil, err
+			return nil, &APIError{Code: http.StatusBadRequest, Message: "Invalid request body"}
 		}
 		return services.User.Register(r)
 	})
 }
 
-func (u *userController) Login(ctx *gin.Context) {
+func (u *userAPI) Login(ctx *gin.Context) {
 	r := new(types.RequestUserLogin)
 
 	Service(ctx, func() (interface{}, error) {
 		err := BindJson(ctx, r)
 		if err != nil {
-			return nil, err
+			return nil, &APIError{Code: http.StatusBadRequest, Message: "Invalid request body"}
 		}
 		return services.User.Login(r)
 	})
 }
 
-func (u *userController) Detail(ctx *gin.Context) {
+func (u *userAPI) Detail(ctx *gin.Context) {
 	r := new(types.RequestUserDetail)
 
 	Service(ctx, func() (interface{}, error) {
 		err := BindJson(ctx, r)
 		if err != nil {
-			return nil, err
+			return nil, &APIError{Code: http.StatusBadRequest, Message: "Invalid request body"}
 		}
 		return services.User.Detail(r)
 	})

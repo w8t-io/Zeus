@@ -6,6 +6,7 @@ import (
 	"Zeus/internal/types"
 	"Zeus/pkg/tools"
 	"fmt"
+
 	"gorm.io/gorm"
 )
 
@@ -14,14 +15,14 @@ type (
 		ctx *ctx.Context
 	}
 
-	UserInter interface {
+	UserService interface {
 		Register(req interface{}) (interface{}, error)
 		Login(req interface{}) (interface{}, error)
 		Detail(req interface{}) (interface{}, error)
 	}
 )
 
-func newUserService(ctx *ctx.Context) UserInter {
+func newUserService(ctx *ctx.Context) UserService {
 	return &user{
 		ctx: ctx,
 	}

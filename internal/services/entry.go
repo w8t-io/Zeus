@@ -3,11 +3,12 @@ package services
 import (
 	"Zeus/internal/ctx"
 	"context"
+
 	"github.com/zeromicro/go-zero/core/logc"
 )
 
 var (
-	User UserInter
+	User UserService
 )
 
 func NewServices(ctx *ctx.Context) {
